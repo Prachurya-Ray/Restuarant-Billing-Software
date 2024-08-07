@@ -5,6 +5,7 @@ import { theme } from "antd"; // Ensure this path matches your project structure
 import Logo from "../sidebarcomponents/Logo";
 import MenuList from "../sidebarcomponents/MenuList";
 import ToggleThemeButton from "../sidebarcomponents/ToggleThemeButton";
+import LogoMini from "../sidebarcomponents/Logo Mini";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -38,7 +39,7 @@ function App() {
           //   bottom: 0,
           // }}
         >
-          <Logo />
+                  {collapsed?<LogoMini />:<Logo/>}
           <MenuList darkTheme={darkTheme} />
           {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
         </Sider>
@@ -67,19 +68,19 @@ function App() {
                       </p>
                       <h3 className="d-flex justify-content-center">0.0.01</h3>,
                       <div className="d-flex justify-content-center">
-                        <Button type="primary">Check Updates</Button>
+                        <Button type="primary" className="green-button">Check Updates</Button>
                       </div>
                     </div>
                   </div>
                   <div>
                     <div>
-                      <h2 className="d-flex justify-content-center">
+                      <h2 className="d-flex justify-content-center mt-5">
                         Click Uptel
                       </h2>
-                      <div className="d-flex justify-content-center">
+                      {/* <div className="d-flex justify-content-center">
                         ©{new Date().getFullYear()} Click Uptel, All Rights
                         Reserved
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

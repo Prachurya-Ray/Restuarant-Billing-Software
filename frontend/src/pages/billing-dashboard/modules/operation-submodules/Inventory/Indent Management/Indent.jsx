@@ -35,6 +35,7 @@ import {
   CalculatorOutlined,
   RetweetOutlined,
 } from "@ant-design/icons";
+import LogoMini from "../../../../sidebarcomponents/Logo Mini";
 
 import Logo from "../../../../sidebarcomponents/Logo";
 import MenuList from "../../../../sidebarcomponents/MenuList";
@@ -107,7 +108,7 @@ function Indent() {
         key: "action",
         render: (text, record) => (
           <Flex style={{ gap: '1rem' }}>
-                <Button><ClearOutlined /></Button>
+                <Button  className='green-hover'><ClearOutlined /></Button>
                 
           </Flex>
         ),
@@ -134,23 +135,29 @@ function Indent() {
           trigger={null}
           theme={darkTheme ? "dark" : "light"}
           className="sidebar"
-          // style={{
-          //   overflow: 'auto',
-          //   height: '100vh',
-          //   position: 'fixed',
-          //   left: 0,
-          //   top: 0,
-          //   bottom: 0,
-          // }}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+          }}
         >
-          <Logo />
+        {collapsed?<LogoMini />:<Logo/>}
           <MenuList darkTheme={darkTheme} />
           {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
         </Sider>
 
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Flex align="center" justify="space-between">
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+          
+          <Header style={{background: colorBgContainer,
+            padding: 0,
+            position: "fixed",
+            zIndex: 100,
+            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
+            left: collapsed ? 80 : 200, }} >
+            <Flex align="center" justify="space-between">
     <Button
         className="toggle"
         onClick={() => setCollapsed(!collapsed)}
@@ -159,14 +166,19 @@ function Indent() {
     />
     <h3>Indent Management</h3>
     <Flex style={{gap:'1rem'}} align="center">
-        <Button icon={<ArrowLeftOutlined />}>Back</Button>
+        <Button icon={<ArrowLeftOutlined />} className='green-hover'>Back</Button>
     </Flex>
     
 </Flex>
 
              
           </Header>
-          <Layout>
+          <Layout
+          style={{ 
+            margin: "64px 16px 0",
+            overflow: "initial",
+            minHeight: "calc(100vh - 64px)",
+          }}>
             
             {/* {Body} */}
 
@@ -176,8 +188,8 @@ function Indent() {
                 <Flex justify="space-between">
                     <h6>Enter item(s) to get Calculation</h6>
                     <Flex gap='1rem'>
-                        <Button type="primary" danger>Add New</Button>
-                        <Button>Clear All</Button>
+                        <Button  className='green-button'>Add New</Button>
+                        <Button className='green-hover'>Clear All</Button>
                     </Flex>
                 </Flex>
 
@@ -189,8 +201,8 @@ function Indent() {
                 <Flex justify="space-between">
                     <p className="text-danger"><ExclamationCircleOutlined />Note: Select raw material and click the calculate to generate indent</p>
                     <Flex gap='1rem'>
-                        <Button><RetweetOutlined />Reset</Button>
-                        <Button type="primary" danger><CalculatorOutlined />Calculate<RightOutlined /></Button>
+                        <Button className='green-hover'><RetweetOutlined />Reset</Button>
+                        <Button  className='green-button'><CalculatorOutlined />Calculate<RightOutlined /></Button>
                     </Flex>
                 </Flex>
 

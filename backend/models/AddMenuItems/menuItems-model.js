@@ -26,6 +26,15 @@ const menuItemsSchema = new mongoose.Schema({
       type: "Number",
       required: true,
     },
+   
+  },
+  menuItemDiscount: {
+    type: "Number",
+    required: true,
+  },
+  menuItemGst: {
+    type: "Number",
+    required: true,
   },
   status: {
     type: "String",

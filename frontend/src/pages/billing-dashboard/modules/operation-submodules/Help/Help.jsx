@@ -31,6 +31,8 @@ import {
   MailOutlined,
 } from "@ant-design/icons";
 
+import LogoMini from "../../../sidebarcomponents/Logo Mini";
+
 import Logo from "../../../sidebarcomponents/Logo";
 import MenuList from "../../../sidebarcomponents/MenuList";
 import ToggleThemeButton from "../../../sidebarcomponents/ToggleThemeButton";
@@ -109,22 +111,27 @@ function Help() {
           trigger={null}
           theme={darkTheme ? "dark" : "light"}
           className="sidebar"
-          // style={{
-          //   overflow: 'auto',
-          //   height: '100vh',
-          //   position: 'fixed',
-          //   left: 0,
-          //   top: 0,
-          //   bottom: 0,
-          // }}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+          }}
         >
-          <Logo />
+        {collapsed?<LogoMini />:<Logo/>}
           <MenuList darkTheme={darkTheme} />
           {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
         </Sider>
 
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+          <Header style={{background: colorBgContainer,
+            padding: 0,
+            position: "fixed",
+            zIndex: 100,
+            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
+            left: collapsed ? 80 : 200, }} >
           <Flex align="center" justify="space-between">
     <Button
         className="toggle"
@@ -144,7 +151,12 @@ function Help() {
 
              
           </Header>
-          <Layout>
+          <Layout
+          style={{ 
+            margin: "64px 16px 0",
+            overflow: "initial",
+            minHeight: "calc(100vh - 64px)",
+          }}>
             
             {/* {Body} */}
 

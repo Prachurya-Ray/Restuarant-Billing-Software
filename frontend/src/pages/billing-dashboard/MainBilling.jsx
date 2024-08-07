@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { FaBeer } from "@react-icons/all-files/fa/FaBeer";
+import { TbPasswordFingerprint } from "react-icons/tb";
+import { FaUser } from "react-icons/fa";
+import { TiUser } from "react-icons/ti";
+import { GiSwipeCard } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
-import { Button, Layout, Checkbox, Form, Input, Card, Col, Row } from "antd";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import { Button, Layout, Checkbox, Form, Input, Card, Col, Row, Flex } from "antd";
 import { theme } from "antd"; // Ensure this path matches your project structure
 // import Logo from "../sidebarcomponents/Logo";
 // import MenuList from "../sidebarcomponents/MenuList";
 // import ToggleThemeButton from "../sidebarcomponents/ToggleThemeButton";
 import BillingImage from "../../assets/billing.png";
+import Logo from "../../assets/ClickUptel.png"
+import LogoMini from "./sidebarcomponents/Logo Mini";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -33,39 +37,15 @@ function App() {
   return (
     <>
       <Layout>
-        {/* <Sider
-          collapsed={collapsed}
-          collapsible
-          trigger={null}
-          theme={darkTheme ? "dark" : "light"}
-          className="sidebar"
-          // style={{
-          //   overflow: 'auto',
-          //   height: '100vh',
-          //   position: 'fixed',
-          //   left: 0,
-          //   top: 0,
-          //   bottom: 0,
-          // }}
-        >
-          <Logo />
-          <MenuList darkTheme={darkTheme} />
-          <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />
-        </Sider> */}
-
         <Layout>
+         
           <Header
-            style={{ padding: 10, background: colorBgContainer }}
-            className="passcode-h"
+            style={{ padding: 10, background: colorBgContainer, boxShadow:'0px 3px 5px gray'}}
+            className="passcode-h z-1"
           >
-            {/* <Button
-              className="toggle"
-              onClick={() => setCollapsed(!collapsed)}
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            /> */}
             <div className="d-flex justify-content-between">
-              <h4>Click Uptel</h4>
+              
+              <img src={Logo} alt="" style={{height:'70px'}}/>
 
               <div>
                 <div className="refno-p">Chai Bar</div>
@@ -73,18 +53,18 @@ function App() {
               </div>
             </div>
           </Header>
-
+          
           <Layout>
-            <Content>
-              <div className="">
+            <Content style={{backgroundColor:'white'}}>
+              <div className="mt-2">
                 <div className="mainbilling-container">
                   <div className="d-flex">
                     <div className="billing-icon">
                       <img src={BillingImage} alt="billing" />
                     </div>
                     <div className="billing-login">
-                      <div className="d-flex justify-content-center">
-                        <div>
+                      <Flex justify="center" align="center">
+                        <div className=" mt-5">
                           <h3>Login to Billing Station</h3>
                           <div>
                             <Form
@@ -113,7 +93,7 @@ function App() {
                                   },
                                 ]}
                               >
-                                <Input />
+                                <Input  style={{width:'12rem', height:'2.5rem'}}/>
                               </Form.Item>
 
                               <Form.Item
@@ -126,7 +106,7 @@ function App() {
                                   },
                                 ]}
                               >
-                                <Input.Password />
+                                <Input.Password style={{width:'12rem', height:'2.5rem'}}/>
                               </Form.Item>
 
                               <Form.Item
@@ -150,6 +130,7 @@ function App() {
                                   type="primary"
                                   onClick={handleLogin}
                                   htmlType="submit"
+                                  className="green-button ms-3 w-75"
                                 >
                                   Login
                                 </Button>
@@ -157,22 +138,24 @@ function App() {
                             </Form>
                           </div>
                         </div>
-                      </div>
+                      </Flex>
                     </div>
                     <div className="billing-side-icon">
                       <div>
-                        <div className="side-login-icon">
-                          <FaBeer />
+                        <Flex className="side-login-icon" vertical justify="center" align="center">
+
+                          <TiUser  className="side-login-icon-logo"/>
                           <p>Login</p>
-                        </div>
-                        <div className="side-login-icon">
-                          <FaBeer />
+                        </Flex>
+                        <Flex className="side-login-icon" vertical justify="center" align="center">
+
+                          <TbPasswordFingerprint className="side-login-icon-logo"/>
                           <p>Passcode</p>
-                        </div>
-                        <div className="side-login-icon">
-                          <FaBeer />
+                        </Flex>
+                        <Flex className="side-login-icon" vertical justify="center" align="center">
+                          <GiSwipeCard  className="side-login-icon-logo"/>
                           <p>Swipe Card</p>
-                        </div>
+                        </Flex>
                       </div>
                     </div>
                   </div>

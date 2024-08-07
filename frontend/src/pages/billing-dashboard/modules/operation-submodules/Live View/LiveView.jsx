@@ -38,6 +38,7 @@ import {
   CalculatorOutlined,
   RetweetOutlined,
 } from "@ant-design/icons";
+import LogoMini from "../../../sidebarcomponents/Logo Mini";
 
 import Logo from "../../../sidebarcomponents/Logo";
 import MenuList from "../../../sidebarcomponents/MenuList";
@@ -133,16 +134,29 @@ function LiveView() {
           trigger={null}
           theme={darkTheme ? "dark" : "light"}
           className="sidebar"
-          
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+          }}
         >
-          <Logo />
+        {collapsed?<LogoMini />:<Logo/>}
           <MenuList darkTheme={darkTheme} />
           {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
         </Sider>
 
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Flex align="center" justify="space-between">
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+        
+          <Header style={{background: colorBgContainer,
+            padding: 0,
+            position: "fixed",
+            zIndex: 100,
+            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
+            left: collapsed ? 80 : 200, }} >
+            <Flex align="center" justify="space-between">
     <Button
         className="toggle"
         onClick={() => setCollapsed(!collapsed)}
@@ -158,15 +172,20 @@ function LiveView() {
 
              
           </Header>
-          <Layout>
+          <Layout
+          style={{ 
+            margin: "64px 16px 0",
+            overflow: "initial",
+            minHeight: "calc(100vh - 64px)",
+          }}>
             
             {/* {Body} */}
             <Flex className="p-2" justify="space-between" align="center" style={{height:'5rem', backgroundColor:'#C7C8CC'}}>
                 <Flex gap='1rem'>
                   
-                        <span className='mouse-pointer' onClick={toggleVisibility}><MdEventNote />
+                        <span className="cursor-pointer" onClick={toggleVisibility}><MdEventNote />
                         Order View </span>
-                        <span className='mouse-pointer' onClick={toggleKotVisibility}><CiMemoPad />Kot View</span>
+                        <span  className="cursor-pointer" onClick={toggleKotVisibility}><CiMemoPad />Kot View</span>
                 </Flex>
                 {
                 !isKotVisible && (<HeaderMenu />)

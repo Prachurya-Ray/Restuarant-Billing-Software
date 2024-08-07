@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { Form, Button, Card, Container } from 'react-bootstrap';
-import "./OutletSettings.css"
+// import "./OutletSettings.css"
 
 
 

@@ -21,12 +21,31 @@ import BillerProfile from '../Biller Profile/BillerProfile.jsx'
 import Feedback from '../Feedback/Feedback.jsx'
 import LiveView from '../Live View/LiveView.jsx'
 import Orders from '../Orders/Orders.jsx'
+import OnlineOrders from '../Online Orders/Orders.jsx'
+import CurrencyConverter from '../CurrencyConversion/CurrencyConvertor.jsx'
+import MenuConfig from '../Menu/MenuConfig.jsx'
+import SpecialListing from '../Menu/SpecialListing.jsx'
+import AreaListing from '../Menu/AreaListing.jsx'
+import ItemListing from '../Menu/ItemListing.jsx'
+import Tax from '../Tax/Tax.jsx'
+import Discount from '../Discount/Discount.jsx'
+import BillKOTConfig from '../Bill-KOT Print/Bill-KOTConfig.jsx'
+import PreferedConfig from '../Bill-KOT Print/PreferedConfig.jsx'
+import PrinterListing from '../Bill-KOT Print/PrinterListing.jsx'
+import BillingScreen from '../Billing Screen/BillingScreen.jsx'
+import DeliveryDist from '../Billing Screen/DeliveryDist.jsx'
+import BillScConfig from '../Billing Screen/BillScConfig.jsx'
+import ServiceRenew from '../Service Renewal/ServiceRenewal.jsx'
+import Settings from '../Settings/Settings.jsx'
+import ItemOnOff from '../ItemOnOff/ItemOnOff.jsx'
+import OrderStatus from '../Customer Order Status/CustomerOrderStatus.jsx'
 
 const route = () => {
   return (
     <>
       <Routes>
         <Route path="orders" element={<Orders />} />
+        <Route path="onlineorders" element={<OnlineOrders/>} />
 
 
 
@@ -61,6 +80,44 @@ const route = () => {
         <Route path="billerprofile" element={<BillerProfile />} />
         <Route path="feedback" element={<Feedback />} />
         <Route path="liveview" element={<LiveView />} />
+        <Route path="currencyconversion" element={<CurrencyConverter/>} />
+
+        <Route path="menuconfig" element={<MenuConfig/>} />
+        <Route path="menuconfig/speciallisting" element={<SpecialListing/>} />
+        <Route path="menuconfig/arealisting" element={<AreaListing/>} />
+        <Route path="menuconfig/itemlisting" element={<ItemListing/>} />
+
+        <Route path="tax" element={<Tax/>} />
+        <Route path="discount" element={<Discount/>} />
+
+        <Route path="billkotconfig" element={<BillKOTConfig/>} />
+        <Route path="billkotconfig/preferedconfig" element={<PreferedConfig/>} />
+        <Route path="billkotconfig/printerlisting" element={<PrinterListing/>} />
+
+        <Route path="billingscreen" element={<BillingScreen/>} />
+        <Route path="billingscreen/deliverydist" element={<DeliveryDist/>} />
+        <Route path="billingscreen/billscconfig" element={<BillScConfig/>} />
+
+        <Route path="servicerenew" element={<ServiceRenew/>} />
+        <Route path="settings" element={<Settings/>} />
+
+        <Route path="itemonoff" element={<ItemOnOff/>} />
+
+        <Route path="orderstatus" element={<OrderStatus/>} />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </Routes>
     </>
   )

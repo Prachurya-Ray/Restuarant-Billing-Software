@@ -15,7 +15,8 @@ import {
   Modal,
   Select,
   Flex,
-  Card
+  Card,
+  Divider
 } from "antd";
 
 import {
@@ -25,6 +26,7 @@ import {
 } from "@ant-design/icons";
 
 import Logo from "../sidebarcomponents/Logo";
+import LogoMini from "../sidebarcomponents/Logo Mini";
 import MenuList from "../sidebarcomponents/MenuList";
 import ToggleThemeButton from "../sidebarcomponents/ToggleThemeButton";
 
@@ -46,7 +48,8 @@ function App() {
   const [iQuantity, setQuantity] = useState(1);
   const [subTotal, setSubTotal] = useState('');
   const [grandTotal, setGrandTotal] = useState('');
-  const [gst, setGst] = useState('')
+  const [discount, setDiscount] = useState('');
+  
   
 
   const [form] = Form.useForm();
@@ -59,37 +62,88 @@ function App() {
     address: "",
     grandTotal:"",
     subTotal:"",
-    menuItemName: "",
-    menuItemPrices: "",
-    menuItemAmount:"",
+    discount:"",
+    items:[],
+    date:"2015-04-13",
   });
 
-  const handleInputChange = (e) => {
-    console.log(e.target.value);
-    // console.log(gst)
-  };
+  function getDate() {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const dates = today.getDate();
+    console.log('Today: ', today)
+    const dateData = `${year}-${month < 10 ? `0${month}` : month}-${dates < 10 ? `0${dates}` : dates}`;
+    console.log(dateData);
+
+    setBill(prevBill => ({
+      ...prevBill,
+      date: dateData,
+    }));
+
+    
+  }
+
+  useEffect(()=>{
+    
+    getDate();
+  },[])
+
+
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
+
+      console.log('Date:',bill.date)
+        
+
+      const items= selectedItems.map(item => ({
+        menuItemName: item.menuItemName,
+        menuItemPrices: item.price,
+        menuItemAmount: item.amount
+      }))
+
+      const updatedBill = {
+        ...bill,
+        subTotal: subTotal,
+        grandTotal: grandTotal,
+        items: items
+        
+      };
+
+  
       const response = await axios.post(
         "http://localhost:8080/api/billingpage/billings",
-        bill
+        updatedBill
       );
+      
       console.log(response.data);
+  
       setBill({
         customerName: "",
         mobileNumber: "",
         address: "",
-        grandTotal:"",
-        subTotal:"",
-        menuItemName: "",
-        menuItemPrices: "",
-        menuItemAmount:"",
+        subTotal: "",
+        grandTotal: "",
+        items: [],
+        date:"",
       });
+      setSelectedItems([]);
+      setSubTotal(0);
+      setGrandTotal(0);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleInputChange = (e) => {
+    // console.log(e.target.value);
+    const { name, value } = e.target;
+    setBill({
+      ...bill,
+      [name]: value,
+    });
   };
 
   const onChange = (e) => {
@@ -108,25 +162,7 @@ function App() {
 
 
 
-  const changePrice=(key,priceItem)=>{
-    return(
-      <>
-          {
-
-            selectedItems.map((item, index) => {
-              
-              if(item.key===key){
-                item.price=priceItem
-                // console.log("Item.price: ",item.price)
-                changeAmount(key,item.price)
-              }
-
-
-            })
-          }
-      </>
-    )
-  }
+  
 
   const changeAmount=(key,priceItem)=>{
     return(
@@ -143,29 +179,30 @@ function App() {
     )
   }
 
-  const handleSubTotal = ()=>{
-    var total=0
-    return(
-      <>
-          {
-            
-            selectedItems.map((item,index)=>{
-              total=total+item.amount
-              
-            })
-            
-          }
-          {
-            setSubTotal(total)
-          }
-      </>
-    )
-  }
+ 
+  useEffect(() => {
+    const calculateSubTotal = () => {
+      let total = 0;
+      selectedItems.forEach((item) => {
+        let amount = item.amount;
+        if (item.menuItemGst > 0) {
+          amount += amount * item.menuItemGst / 100;
+        }
+        if (item.menuItemDiscount > 0) {
+          amount -= amount * item.menuItemDiscount / 100;
+        }
+        total += amount;
+      });
+      setSubTotal(total);
+    };
+    calculateSubTotal();
+  }, [selectedItems]);
+  
 
   const handleGrandTotal = ()=>{
     var total=0
-    total = (subTotal*gst)/100
-    setGrandTotal(total+subTotal)
+    total = (subTotal*discount)/100
+    setGrandTotal(subTotal-total)
   }
 
   const columns = [
@@ -176,20 +213,27 @@ function App() {
     },
 
     {
-      title: "Special Notes",
-      dataIndex: "specialNotes",
-      key: "specialNotes",
-    },
-    {
       title: "Qty",
       dataIndex: "qty",
       key: "qty",
       render: (text, record) => (
-        <Input
-          value={text}
-          onChange={(e) => handleQuantityChange(record.key, e.target.value)}
-          style={{ width: 50 }}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap:'0.5rem' }}>
+          <Button
+            onClick={() => handleQuantityChange(record.key, record.qty - 1)}
+            disabled={record.qty <= 1} // Prevent quantity from going below 1
+            className="green-button"
+          >
+            -
+          </Button>
+          <Input
+            value={text}
+            onChange={(e) => handleQuantityChange(record.key, Number(e.target.value))}
+            style={{ width: 50, textAlign: 'center' }}
+          />
+          <Button onClick={() => handleQuantityChange(record.key, record.qty + 1)} className="green-button">
+            +
+          </Button>
+        </div>
       ),
     },
     {
@@ -202,13 +246,15 @@ function App() {
           <Button onClick={() => {
             setPrice(record.itemPrices.menuItemFullPrice)
             changePrice(record.key,record.itemPrices.menuItemFullPrice)
-          }}>
+          }}
+          className="green-hover">
             Full
           </Button>
           <Button onClick={() => {
             setPrice(record.itemPrices.menuItemHalfPrice)
             changePrice(record.key,record.itemPrices.menuItemHalfPrice)
-          }}>
+          }}
+          className="green-hover">
             Half
           </Button>
         </>
@@ -228,11 +274,20 @@ function App() {
       key: "amount",
     },
     {
+      title: "GST",
+      dataIndex: "menuItemGst",
+      key: "menuItemGst",
+    },
+    {
+      title: "Discount",
+      dataIndex: "menuItemDiscount",
+      key: "menuItemDiscount",
+    },
+    {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
         <span>
-          <Button onClick={() => onEdit(record)}>Edit</Button>
           <Button onClick={() => onDelete(record.key)} danger>
             Delete
           </Button>
@@ -294,7 +349,9 @@ function App() {
         price: iPrice, // Assuming you want to set the default price to fullPrice
         amount: iAmount*iQuantity, // Example amount
         itemPrices: menu.menuItemPrices, // Assuming you want to set the default price to fullPrice
-        
+        menuItemDiscount:menu.menuItemDiscount,
+        menuItemGst:menu.menuItemGst,
+        qty: 1,
       },
     ]);
     setIsOpen(false);
@@ -307,6 +364,33 @@ function App() {
     form.setFieldsValue(menu);
     setIsModalOpen(true);
   };
+
+
+
+  const changePrice = (key, priceItem) => {
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.map((item) => {
+        if (item.key === key) {
+          const updatedItem = { ...item, price: priceItem, amount: priceItem * item.qty };
+          return updatedItem;
+        }
+        return item;
+      })
+    );
+  };
+  
+  const handleQuantityChange = (key, value) => {
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.map((item) => {
+        if (item.key === key) {
+          const updatedItem = { ...item, qty: value, amount: item.price * value };
+          return updatedItem;
+        }
+        return item;
+      })
+    );
+  };
+  
 
   //delete button table
 
@@ -351,15 +435,6 @@ function App() {
     );
   };
 
-  //tabel quantiy
-  const handleQuantityChange = (key, value) => {
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems.map((menu) =>
-        menu.key === key ? { ...menu, qty: value } : menu
-      )
-    );
-  };
-  // Ant Design Dropdown menu
   const menu = (
     <Menu>
       <Menu.Item key="1">UPI</Menu.Item>
@@ -376,14 +451,25 @@ function App() {
           trigger={null}
           theme={darkTheme ? "dark" : "light"}
           className="sidebar"
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0,
+            zIndex: 100,
+          }}
         >
-          <Logo />
+                  {collapsed?<LogoMini />:<Logo/>}
           <MenuList darkTheme={darkTheme} />
-          {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
         </Sider>
 
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+          <Header style={{background: colorBgContainer,
+            padding: 0,
+            position: "fixed",
+            zIndex: 100,
+            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
+            left: collapsed ? 80 : 200, }} >
             <Button
               className="toggle"
               onClick={() => setCollapsed(!collapsed)}
@@ -393,7 +479,12 @@ function App() {
           </Header>
 
           <Layout>
-            <Content>
+            <Content
+          style={{
+            margin: "64px 16px 0",
+            overflow: "initial",
+            minHeight: "calc(100vh - 64px)",
+          }}>
               <div className="billing-container-main">
                 <div className="billing-container">
                   <div className="billing-form">
@@ -402,7 +493,7 @@ function App() {
                       layout="vertical"
                       onSubmit={handleFormSubmit}
                     >
-                      {/* <div className="d-flex"> */}
+                      <Flex justify="space-around">
 
                       <Form.Item
                         label="Name"
@@ -442,6 +533,8 @@ function App() {
                           onChange={handleInputChange}
                         />
                       </Form.Item>
+                      </Flex>
+                      <Divider/>
                       <div className="d-flex">
                         <div className="dropdown">
                           <button
@@ -488,44 +581,38 @@ function App() {
                           <Form.Item name="complimentary">
                             <Checkbox>Complimentary</Checkbox>
                           </Form.Item>
-                          <div>
-                            + Applied Discounts(<a href="#">Show Details</a>)
-                          </div>
-                          <Flex>
-                            <Button 
-                              className="green-button"
-                              onClick={handleSubTotal}
-                            >Sub-Total</Button>
+                          <Flex align="center" gap='1rem'>
+                            
                           
-                          <Form.Item name="subTotal">
-                          <Card 
-                              style={{ 
-                                width: 150, 
-                                height: 50, 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                justifyContent: 'center', 
-                                textAlign: 'center' 
-                              }}
-                            >
-                              {subTotal}
-                            </Card>
+                            <Form.Item label="Total" name="subTotal">
+                              <Card 
+                                style={{ 
+                                  width: 150, 
+                                  height: 50, 
+                                  display: 'flex', 
+                                  alignItems: 'center', 
+                                  justifyContent: 'center', 
+                                  textAlign: 'center' 
+                                }}
+                              >
+                                {subTotal}
+                              </Card>
                             
                             
-                          </Form.Item>
+                            </Form.Item>
                           </Flex>
                           
-                          <div>
-                            <Form.Item label="GST" name="gst">
+                          <Flex>
+                            <Form.Item label="Discount/Coupon" name="discount">
                               <Input
                                 placeholder="0.00"
-                                name="gst"
-                                value={bill.gst}
-                                onChange={(e) => setGst( e.target.value)}
+                                name="discount"
+                                value={bill.discount}
+                                onChange={(e) => setDiscount( e.target.value)}
 
                               />
                             </Form.Item>
-                          </div>
+                          </Flex>
                           {/* <Form.Item label="Round Off" name="roundOff">
                             <Input
                               placeholder="0"
@@ -549,7 +636,7 @@ function App() {
                               </Checkbox>
                             </Form.Item>
                           </div>
-                          <div>
+                          <Flex align="center" gap='1rem'>
                             <Button
                               className="green-button"
                                 onClick={handleGrandTotal}
@@ -568,48 +655,12 @@ function App() {
                               {grandTotal}
                             </Card>
                             </Form.Item>
-                          </div>
+                          </Flex>
                         </div>
-
-                        {/* <div className="d-flex justify-content-between">
-                          <Radio.Group onChange={onChange} value={value}>
-                            <Radio value={1}>Cash</Radio>
-                            <Radio value={2}>Card</Radio>
-                            <Radio value={2}>Due Payment</Radio>
-                            <Radio value={2}>Others</Radio>
-                            <Radio value={2}>Part Payment</Radio>
-                          </Radio.Group>
-                          <div>
-                            <Button type="primary">Split</Button>
-                            <Button type="primary">Advance Order</Button>
-                            <Button type="">Reset</Button>
-                            <Button type="primary">KOT & Print</Button>
-                            <Button type="">Hold</Button>
-                          </div>
-                        </div> */}
-                        {/* <div className="d-flex">
-                          <div>
-                            <AntDropdown overlay={menu}>
-                              <Button>
-                                Dropdown <DownOutlined />
-                              </Button>
-                            </AntDropdown>
-                          </div>
-                          <div className="d-flex">
-                            <Button type="primary">KOT</Button>
-
-                            <Link to="/billingdashboardbilling">
-                              <Button type="primary">Save</Button>
-                            </Link>
-                          </div>
-                          <Button type="primary" onClick={handleFormSubmit}>
-                            Submit
-                          </Button>
-                        </div> */}
                         <Flex justify="center" gap='3rem'>
                           <Button className="green-button" >Reset</Button>
                           <Button className="green-button" >Save</Button>
-                          <Button className="green-button" >Submit</Button>
+                          <Button className="green-button" onClick={handleFormSubmit} >Submit</Button>
                         </Flex>
                       </div>
                     </Form>

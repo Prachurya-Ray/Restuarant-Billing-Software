@@ -3,6 +3,7 @@ import { Menu } from "antd";
 import { HomeOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { MdOutlineInventory } from "react-icons/md";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { FaUserFriends } from "react-icons/fa";
 import { CiViewList } from "react-icons/ci";
 import { IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -24,14 +25,19 @@ const MenuList = ({ darkTheme }) => {
         </Link>
       </Menu.Item>
       {/* Billing */}
-      <Menu.Item key="inventory">
+      <Menu.Item key="inventory" icon={<MdOutlineInventory />}>
         <Link to="/inventory" className="noUnderline">
-          <MdOutlineInventory /> Inventory
+           Inventory
         </Link>
       </Menu.Item>
-      <Menu.Item key="menuitem">
+      <Menu.Item key="menuitem" icon={<MdOutlineRestaurantMenu />}>
         <Link to="/menuitem" className="noUnderline">
-          <MdOutlineRestaurantMenu /> Add Menu Item
+           Add Menu Item
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="customer-details" icon={<FaUserFriends />}>
+        <Link to="/customerdata" className="noUnderline">
+        Customer Details
         </Link>
       </Menu.Item>
       <Menu.SubMenu
@@ -39,16 +45,16 @@ const MenuList = ({ darkTheme }) => {
         icon={<UnorderedListOutlined />}
         title="Billing Dashboard"
       >
-        <Menu.Item key="allOrders">
+        <Menu.Item key="allOrders" icon={<CiViewList />}>
           <Link to="/mainbillingdashboard" className="noUnderline">
-            <CiViewList />
+            
             Billing
           </Link>
         </Menu.Item>
       </Menu.SubMenu>
-      <Menu.Item key="logout">
+      <Menu.Item key="logout" icon={<IoMdLogOut />}>
         <Link to="/" onClick={handleLogout} className="noUnderline">
-          <IoMdLogOut /> Logout
+           Logout
         </Link>
       </Menu.Item>
     </Menu>

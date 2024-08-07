@@ -7,9 +7,6 @@ import { MdOutlineUpdate } from "react-icons/md";
 import { MdOutlineLiveTv } from "react-icons/md";
 import { Menu } from "antd";
 import {
-  HomeOutlined,
-  AppstoreOutlined,
-  PayCircleOutlined,
   SettingOutlined,
   AreaChartOutlined,
   BarsOutlined,
@@ -22,8 +19,8 @@ const MenuList = ({ darkTheme }) => {
       mode="inline"
       className="menu-bar"
     >
-      <Menu.Item key="billing">
-        <Link to="/billingdashboardbilling" className="noUnderline"><CiViewList /> Billing</Link>
+      <Menu.Item key="billing" icon={<CiViewList />}>
+        <Link to="/billingdashboardbilling" className="noUnderline"> Billing</Link>
       </Menu.Item>
       <Menu.Item key="operations" icon={<IoMdGitNetwork />}>
         <Link to="/billingdashboardoperation" className="noUnderline"> Operations</Link>
@@ -73,10 +70,6 @@ const MenuList = ({ darkTheme }) => {
           <Link to="/nc-item-summary" className="noUnderline"> Nc Item Summary</Link>
         </Menu.Item>
 
-        {/* <Menu.SubMenu key='subtasks' title="Subtasks">
-        <Menu.Item key='subtasks-1'>Subtasks 1</Menu.Item>
-        <Menu.Item key='subtasks-2'>Subtasks 2</Menu.Item>
-      </Menu.SubMenu> */}
       </Menu.SubMenu>
 
       <Menu.Item key="inventory" icon={<MdOutlineLiveTv />}>
@@ -91,8 +84,8 @@ const MenuList = ({ darkTheme }) => {
         <Link to="/billingdashboardcheckupdates" className="noUnderline"> Check Updates</Link>
       </Menu.Item>
 
-      <Menu.Item key="setting">
-        <Link to="/mainbillingdashboard" className="noUnderline"><IoMdLogOut /> Logout</Link>
+      <Menu.Item key="setting" icon={<IoMdLogOut />}>
+        <Link to="/mainbillingdashboard" className="noUnderline"> Logout</Link>
       </Menu.Item>
     </Menu>
   );

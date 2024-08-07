@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Layout, Flex } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { theme } from "antd"; // Ensure this path matches your project structure
@@ -7,27 +7,57 @@ import { FaUser } from "react-icons/fa";
 import { FcSalesPerformance } from "react-icons/fc";
 import { GiProfit } from "react-icons/gi";
 import { GiExpense } from "react-icons/gi";
+import axios from "axios";
 
 import ReactApexChart from "react-apexcharts"; //Apex Chart
 
 import Logo from "./sidebarcomponents/Logo";
+import LogoMini from "./sidebarcomponents/Logo Mini";
 import MenuList from "./sidebarcomponents/MenuList";
-import ToggleThemeButton from "./sidebarcomponents/ToggleThemeButton";
-import Calendar from "react-calendar";
+
 
 
 const { Header, Content, Footer, Sider } = Layout;
 
 function App() {
-  // type ValuePiece = Date | null;
-
-  // type Value = ValuePiece | [ValuePiece, ValuePiece];
-  // const [value, onChange] = useState < Value > new Date();
   const [darkTheme, setDarkTheme] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [data, setData] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("fetching");
+        const response = await axios.get('http://localhost:8080/api/billingpage/billingview');
+        console.log("fetched", response.data);
+
+        const rawData = response.data.billing;
+
+        // Ensure rawData is an array
+        if (Array.isArray(rawData)) {
+          setData(rawData);
+
+          // Calculate the total amount
+          const total = rawData.reduce((sum, record) => sum + parseFloat(record.grandTotal || 0), 0);
+          setTotalAmount(total);
+        } else {
+          console.error('Fetched data is not an array:', rawData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
   const toggleTheme = () => {
     setDarkTheme(!darkTheme);
+  };
+  
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
   };
 
   const {
@@ -179,28 +209,36 @@ function App() {
     <>
       <Layout>
         <Sider
-          hasSider
-          collapsed={collapsed}
-          collapsible
-          trigger={null}
-          theme={darkTheme ? "dark" : "light"}
-          className="sidebar"
-          // style={{
-          //   overflow: 'auto',
-          //   height: '100vh',
-          //   position: 'fixed',
-          //   left: 0,
-          //   top: 0,
-          //   bottom: 0,
-          // }}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={toggleCollapse}
+        trigger={null}
+        theme={darkTheme ? "dark" : "light"}
+        className="sidebar"
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          left: 0,
+          zIndex: 100,
+        }}
         >
-          <Logo />
+        {collapsed?<LogoMini />:<Logo/>}
           <MenuList darkTheme={darkTheme} />
           {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
         </Sider>
 
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+          <Header 
+          
+          style={{
+            background: colorBgContainer,
+            padding: 0,
+            position: "fixed",
+            zIndex: 100,
+            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
+            left: collapsed ? 80 : 200,
+          }}>
             <Button
               className="toggle"
               onClick={() => setCollapsed(!collapsed)}
@@ -210,7 +248,12 @@ function App() {
           </Header>
 
           <Layout>
-            <Content>
+            <Content
+            style={{
+              margin: "64px 16px 0",
+              overflow: "initial",
+              minHeight: "calc(100vh - 64px)",
+            }}>
               <div className="d-flex">
                 {/* chart side   */}
                 <div className="chart-card">
@@ -222,7 +265,7 @@ function App() {
                             Total Customers <FaUser />
                           </Flex>
 
-                          <h3>₹41,455</h3>
+                          <h3>{data.length}</h3>
                           <Flex justify="space-between">
                             190 Order
                             <CiMenuKebab />
@@ -236,7 +279,7 @@ function App() {
                           Total Sale
                           <FcSalesPerformance />
                         </Flex>
-                        <h3>₹41,455</h3>
+                        <h3>{totalAmount}</h3>
                         <Flex justify="space-between">
                           <p>190 Order</p>
                           <CiMenuKebab />

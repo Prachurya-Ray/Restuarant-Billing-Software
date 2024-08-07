@@ -10,14 +10,18 @@ const menuItemsAdd = async (req, res) => {
     const {
       menuItemName,
       menuItemDescription,
-      menuItemPrices
+      menuItemPrices,
+      menuItemDiscount,
+      menuItemGst,
       // menuItemFullPrice,
       // menuItemHalfPrice,
     } = req.body;
     const menuItemCreated = await menuItems.create({
       menuItemName,
       menuItemDescription,
-      menuItemPrices
+      menuItemPrices,
+      menuItemDiscount,
+      menuItemGst,
       // menuItemFullPrice,
       // menuItemHalfPrice,
     });

@@ -39,6 +39,13 @@
   border-radius: 50%;
   /* background: rgba(28, 17, 41, 0.88); */
 }
+
+.logo-icon-mini{
+  width: 50px;
+  /* height: 70px; */
+}
+
+
 .menu-bar {
   height: 88vh;
   margin-top: 2rem;
@@ -67,6 +74,17 @@
   background-color: #28a745; /* Green color */
   border-color: #28a745;
   color: #fff; /* Text color */
+}
+.green-button:hover {
+  background-color: white !important;
+  border-color: #28a745 !important;
+  color: #28a745 !important; /* Text color */
+}
+
+.green-hover:hover{
+  background-color: white !important;
+  border-color: #28a745 !important;
+  color: #28a745 !important; 
 }
 
 /* side symbol colors for operation */
@@ -101,9 +119,9 @@
 
 /* Operation Logo */
 .operation-logo-size{
-  height: 3rem;
-  width: 3rem;
-  color: #28a745;
+  height: 2rem;
+  width: 2rem;
+  
 }
 
 
@@ -111,7 +129,7 @@
 .green-button:focus {
   background-color: #218838; 
   border-color: none;
-  color: #fff; 
+  color: #fff==12; gv
   cursor: not-allowed;
 } */
 
@@ -164,6 +182,16 @@
   padding: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 background-color: white;
+cursor: pointer;
+}
+
+.side-login-icon:hover{
+  border-bottom: 5px solid green;
+}
+
+.side-login-icon-logo{
+  height: 2rem;
+  width: 2rem;
 }
 /* dropdown  */
 /* Add these styles in your CSS file */

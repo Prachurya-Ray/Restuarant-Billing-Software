@@ -1,7 +1,5 @@
 const Billings = require("../../../models/BillingDashboard/Billing/billing-model");
-const { format } = require("date-fns");
-const currentDate = new Date();
-const today = format(currentDate, "yyyy-MM-dd");
+const { format, parseISO } = require("date-fns");
 
 const billingData = async (req, res) => {
   try {
@@ -15,7 +13,13 @@ const billingData = async (req, res) => {
       menuItemPrices,
       menuItemAmount,
       subTotal,
+      items,
+      date,
     } = req.body;
+
+    // Use today's date if no date is provided in the request body
+    const billingDate = date || format(new Date(), "yyyy-MM-dd");
+
     const billingCreated = await Billings.create({
       customerName,
       mobileNumber,
@@ -25,6 +29,8 @@ const billingData = async (req, res) => {
       menuItemName,
       menuItemPrices,
       menuItemAmount,
+      items,
+      date: billingDate,
     });
     console.log("Bills added Successfully!", billingCreated);
     return res.status(200).json({

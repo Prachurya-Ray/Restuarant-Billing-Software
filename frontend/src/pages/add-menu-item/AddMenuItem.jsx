@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { Button, Layout, Input, Form, Table, Modal, theme } from "antd";
+import { Button, Layout, Input, Form, Table, Modal, theme, Flex } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -8,6 +8,7 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import Logo from "./sidebarcomponents/Logo";
+import LogoMini from "./sidebarcomponents/Logo Mini";
 import MenuList from "./sidebarcomponents/MenuList";
 import ToggleThemeButton from "./sidebarcomponents/ToggleThemeButton";
 import axios from "axios";
@@ -121,6 +122,16 @@ const AddMenuItems = () => {
       key: "menuItemDescription",
     },
     {
+      title: "Menu Item GST",
+      dataIndex: "menuItemGst",
+      key: "menuItemGst",
+    },
+    {
+      title: "Menu Item Discount",
+      dataIndex: "menuItemDiscount",
+      key: "menuItemDiscount",
+    },
+    {
       title: "Menu Item Half Price",
       dataIndex: ["menuItemPrices", "menuItemHalfPrice"],
       key: "menuItemHalfPrice",
@@ -135,10 +146,10 @@ const AddMenuItems = () => {
       key: "action",
       render: (text, record) => (
         <span>
-          <Button type="link" onClick={() => showEditModal(record)}>
+          <Button type="link" className="button-green" onClick={() => showEditModal(record)}>
             <EditOutlined /> Edit
           </Button>
-          <Button type="link" onClick={() => showDeleteConfirm(record._id)}>
+          <Button type="link" className="button-green"  onClick={() => showDeleteConfirm(record._id)}>
             <DeleteOutlined /> Delete
           </Button>
         </span>
@@ -187,7 +198,7 @@ const AddMenuItems = () => {
           zIndex: 100,
         }}
       >
-        <Logo />
+        {collapsed?<LogoMini />:<Logo/>}
         <MenuList darkTheme={darkTheme} />
         {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
       </Sider>
@@ -221,13 +232,15 @@ const AddMenuItems = () => {
             style={{ padding: 24, minHeight: 360 }}
           >
             <div>
-              <h1>Add Menu Items</h1>
+              <h1 className="text-center mb-5">Add Menu Items</h1>
+              <Flex justify="center">
               <Form
                 form={addForm}
                 layout="vertical"
                 onFinish={handleFormSubmit}
                 style={{ maxWidth: 400 }}
               >
+                <Flex wrap justify="space-between">
                 <Form.Item
                   name="menuItemName"
                   label="Menu Item Name"
@@ -268,12 +281,31 @@ const AddMenuItems = () => {
                 >
                   <Input />
                 </Form.Item>
+                <Form.Item
+                  name="menuItemGst"
+                  label="Menu Item GST"
+                  rules={[{required: true, message: "Please enter Menu item GST!" }]}
+                >
+                  <Input />
+                </Form.Item>
+
+                <Form.Item
+                  name="menuItemDiscount"
+                  label="Menu Item Discount"
+                  rules={[{required: true, message: "Please enter Menu item Discount!" }]}
+                >
+                  <Input />
+                </Form.Item>
+                
                 <Form.Item>
-                  <Button type="primary" htmlType="submit">
+                  <Button className="green-button ms-5 w-100" htmlType="submit">
                     Add Menu Items
                   </Button>
                 </Form.Item>
+                </Flex>
               </Form>
+              </Flex>
+              
             </div>
 
             <div>
@@ -313,6 +345,24 @@ const AddMenuItems = () => {
               name="menuItemDescription"
               label="Menu Item Description"
               rules={[{ message: "Please enter Menu item description!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="menuItemGst"
+              label="Menu Item GST"
+              rules={[
+                { required: true, message: "Please enter Menu item GST!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="menuItemDiscount"
+              label="Menu Item Discount"
+              rules={[
+                { required: true, message: "Please enter Menu item Discount!" },
+              ]}
             >
               <Input />
             </Form.Item>

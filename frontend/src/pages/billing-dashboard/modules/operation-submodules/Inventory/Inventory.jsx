@@ -26,10 +26,15 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 
+import LogoMini from "../../../sidebarcomponents/Logo Mini";
 
 import Logo from "../../../sidebarcomponents/Logo";
 import MenuList from "../../../sidebarcomponents/MenuList";
 import ToggleThemeButton from "../../../sidebarcomponents/ToggleThemeButton";
+import stockImg from "../../../../../assets/stock.png"
+import reportImg from "../../../../../assets/report.png"
+import calculatorImg from "../../../../../assets/calculator-color.png"
+
 const { Header, Content, Footer, Sider } = Layout;
 const { Meta } = Card;
 
@@ -68,14 +73,28 @@ function Inventory() {
           trigger={null}
           theme={darkTheme ? "dark" : "light"}
           className="sidebar"
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+          }}
         >
-          <Logo />
+        {collapsed?<LogoMini />:<Logo/>}
           <MenuList darkTheme={darkTheme} />
           {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
         </Sider>
 
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+          
+          <Header style={{background: colorBgContainer,
+            padding: 0,
+            position: "fixed",
+            zIndex: 100,
+            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
+            left: collapsed ? 80 : 200, }} >
             <Space align="center" style={{ width: "100%", justifyContent: "space-between" }}>
               <Button
                 className="toggle"
@@ -89,6 +108,12 @@ function Inventory() {
               </Space>
             </Space>
           </Header>
+          <Layout
+          style={{ 
+            margin: "64px 16px 0",
+            overflow: "initial",
+            minHeight: "calc(100vh - 64px)",
+          }}>
           <Layout style={{ margin: "2rem", border: "solid 1px grey", borderRadius: "10px", padding:'1rem' }}>
 
             <h3>Reports</h3>
@@ -102,7 +127,7 @@ function Inventory() {
               ]}
                 >
               <Meta
-                avatar={<Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZTqNG68eYLcEF_34TOZw14hjaUyThvu6Xk6vW0WhoG0Afany0A11WfmrtjKByzkh12o0&usqp=CAU" />}
+                avatar={<Avatar src={stockImg} />}
                 title="Current Stock"
                 style={{height:'10rem'}}
                 description="Update Clossing Stock of the raw material with ease"
@@ -118,7 +143,7 @@ function Inventory() {
               ]}
                 >
               <Meta
-                avatar={<Avatar src="https://static.vecteezy.com/system/resources/previews/010/882/199/original/people-with-clipboard-document-illustration-business-checklist-with-character-concept-icon-questionnaire-work-report-and-holding-sign-human-with-note-board-mark-and-happy-avatar-employee-vector.jpg" />}
+                avatar={<Avatar src={reportImg} />}
                 title="Opening Closing Report"
                 style={{height:'10rem'}}
                 description="Know your raw material stock status and purchase/consumption history."
@@ -134,7 +159,7 @@ function Inventory() {
               ]}
                 >
               <Meta
-                avatar={<Avatar src="https://static.vecteezy.com/system/resources/previews/036/242/429/original/calculator-icon-clipart-avatar-logotype-isolated-illustration-vector.jpg" />}
+                avatar={<Avatar src={calculatorImg} />}
                 title="Indent Management"
                 style={{height:'10rem'}}
                 description="Calculate raw materials required to prepare specific items in bulk."
@@ -145,6 +170,7 @@ function Inventory() {
 
             
 
+          </Layout>
           </Layout>
           <Footer style={{ textAlign: "center" }}>
             Click Uptel ©{new Date().getFullYear()} Created by ClickUptel Team

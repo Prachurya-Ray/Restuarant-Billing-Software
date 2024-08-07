@@ -7,6 +7,7 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import Logo from "./sidebarcomponents/Logo";
+import LogoMini from "./sidebarcomponents/Logo Mini";
 import MenuList from "./sidebarcomponents/MenuList";
 import ToggleThemeButton from "./sidebarcomponents/ToggleThemeButton";
 import axios from "axios";
@@ -182,7 +183,7 @@ const  Inventory = () => {
           zIndex: 100,
         }}
       >
-        <Logo />
+        {collapsed?<LogoMini />:<Logo/>}
         <MenuList darkTheme={darkTheme} />
         {/* <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} /> */}
       </Sider>

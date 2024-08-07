@@ -17,7 +17,6 @@ import ForgetPassword from "./pages/ForgetPassWord/index";
 import ResetPassword from "./pages/PasswordReset/index.jsx";
 import Dashboard from "./components/MainFile/Main";
 // import Error from "./components/Error.js";
-
 import MainBillingDashboard from "./pages/billing-dashboard/MainBilling";
 import BillingDashboardSwipeCard from "./pages/billing-dashboard/SwipeCard";
 import BillingDashboardPasscode from "./pages/billing-dashboard/PassCode";
@@ -25,7 +24,7 @@ import BillingDashboardPasscode from "./pages/billing-dashboard/PassCode";
 import BillingDashboardBilling from "./pages/billing-dashboard/modules/Billing";
 import BillingDashboardOperation from "./pages/billing-dashboard/modules/Operations.jsx";
 import BillingDashboardCheckUpdates from "./pages/billing-dashboard/modules/CheckUpdates";
-import BillingDashboardLiveView from "./pages/billing-dashboard/modules/Orders/Orders.jsx";
+import BillingDashboardLiveView from "./pages/billing-dashboard/modules/Live View/Orders.jsx";
 import BillingDashboardSettings from "./pages/billing-dashboard/modules/Settings";
 import RoutingReport from "./pages/billing-dashboard/modules/report-submodules/routing-reportmodules/route";
 import RoutingOperation from "./pages/billing-dashboard/modules/operation-submodules/routing-operationmodules/route.js";
@@ -39,6 +38,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import AdminOrder from "./components/AdminOrder/AdminOrder.jsx";
 import UserOrder from "./components/UserOrder/UserOrder.jsx";
+import CustomerDetails from "./pages/billing-dashboard/CustomerDetails/CustomerDetails.jsx";
 
 
 
@@ -117,6 +117,8 @@ function App() {
             path="/menuitem"
             element={<AdminDashboardAddMenuItem />}
           />
+          <Route path="customerdata" element={<CustomerDetails/>} />
+          
          
           {/* Orders section for Admin and User accounts */}
           <Route path="/admin/orders" element={<AdminOrder />} />

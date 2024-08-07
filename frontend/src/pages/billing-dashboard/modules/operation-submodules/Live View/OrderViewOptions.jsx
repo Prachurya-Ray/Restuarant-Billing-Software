@@ -1,5 +1,8 @@
 import { RiGalleryView2 } from "react-icons/ri";
 import { RiEBikeLine } from "react-icons/ri";
+import swiggyImg from '../../../../../assets/Swiggy_logo.png'
+import zomatoImg from '../../../../../assets/zomato.png'
+
 
 import {
     Button,
@@ -46,11 +49,11 @@ const OrderViewOptions = ()=>{
                         <span className='padding-1rem padding-top-0'>Online</span>
                     </li>
                     <li class="dropDown-orderView-options-menu list-group-item d-flex justify-content-between align-items-center">
-                        <Avatar src="https://logos-world.net/wp-content/uploads/2020/11/Swiggy-Emblem.png" />
+                        <Avatar src={swiggyImg} />
                         <span className='padding-1rem padding-top-0'>Swiggy</span>
                     </li>
                     <li class="dropDown-orderView-options-menu list-group-item d-flex justify-content-between align-items-center">
-                    <Avatar src="https://apollo.olx.in/v1/files/iocuxv5t5tnl3-IN/image" />
+                    <Avatar src={zomatoImg} />
                         <span className='padding-1rem padding-top-0'>Zomato</span>
                     </li>
                 </ul>
