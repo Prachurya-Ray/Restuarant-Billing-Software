@@ -72,9 +72,7 @@ function App() {
     const month = today.getMonth() + 1;
     const year = today.getFullYear();
     const dates = today.getDate();
-    console.log('Today: ', today)
     const dateData = `${year}-${month < 10 ? `0${month}` : month}-${dates < 10 ? `0${dates}` : dates}`;
-    console.log(dateData);
 
     setBill(prevBill => ({
       ...prevBill,
@@ -95,7 +93,6 @@ function App() {
     e.preventDefault();
     try {
 
-      console.log('Date:',bill.date)
         
 
       const items= selectedItems.map(item => ({
@@ -138,7 +135,6 @@ function App() {
   };
 
   const handleInputChange = (e) => {
-    // console.log(e.target.value);
     const { name, value } = e.target;
     setBill({
       ...bill,
@@ -169,7 +165,7 @@ function App() {
       <>
           {selectedItems.map((item, index) => {
               if(item.key===key){
-                console.log(item)
+                
                 item.amount=priceItem*item.qty
               }
 
@@ -242,7 +238,6 @@ function App() {
       key: "menuItemPrices",
       render: (text, record) => (
         <>
-        {/* {console.log("Record: ",record)} */}
           <Button onClick={() => {
             setPrice(record.itemPrices.menuItemFullPrice)
             changePrice(record.key,record.itemPrices.menuItemFullPrice)
@@ -565,7 +560,6 @@ function App() {
                                 onClick={() => handleDropdownItemClick(menu)}
                               >
                                 {menu.menuItemName}
-                                {/* {console.log(selectedItems)} */}
                               </li>
                             ))}
                           </ul>
