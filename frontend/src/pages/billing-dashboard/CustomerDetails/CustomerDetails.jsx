@@ -167,6 +167,21 @@ const { Column } = Table;
       <Card title="Customer Billing Records" style={{ marginTop: '20px' }}>
         <Table dataSource={data} rowKey="_id">
           <Column title="Index" dataIndex="index" key="index" render={text => text || 'N/A'} />
+          <Column 
+            title="Date" 
+            dataIndex="date" 
+            key="date" 
+            render={(text) => {
+              if (!text) return 'N/A';
+              const date = new Date(text);
+              return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            }} 
+          />
+
           <Column title="Customer Name" dataIndex="customerName" key="customerName" render={text => text || 'N/A'} />
           <Column title="Mobile Number" dataIndex="mobileNumber" key="mobileNumber" render={text => text !== null ? text : 'N/A'} />
           <Column title="Address" dataIndex="address" key="address" render={text => text || 'N/A'} />

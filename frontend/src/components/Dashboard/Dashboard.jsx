@@ -25,32 +25,123 @@ function App() {
   const [data, setData] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("fetching");
-        const response = await axios.get('http://localhost:8080/api/billingpage/billingview');
-        console.log("fetched", response.data);
 
-        const rawData = response.data.billing;
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         console.log("fetching");
+//         const response = await axios.get('http://localhost:8080/api/billingpage/billingview');
+//         console.log("fetched", response.data);
 
-        // Ensure rawData is an array
-        if (Array.isArray(rawData)) {
-          setData(rawData);
+//         const rawData = response.data.billing;
 
-          // Calculate the total amount
-          const total = rawData.reduce((sum, record) => sum + parseFloat(record.grandTotal || 0), 0);
-          setTotalAmount(total);
-        } else {
-          console.error('Fetched data is not an array:', rawData);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+//         // Ensure rawData is an array
+//         if (Array.isArray(rawData)) {
+//           setData(rawData);
+
+//           // Calculate the total amount
+//           const total = Math.round(rawData.reduce((sum, record) => sum + parseFloat(record.grandTotal || 0), 0));
+//           setTotalAmount(total);
+
+//           // Convert date strings to Date objects, then to locale date strings, and store unique dates
+//           const dateTotals = rawData.reduce((acc, record) => {
+//             const dateObj = new Date(record.date);
+//             const formattedDate = dateObj.toLocaleDateString();
+
+//             if (!acc[formattedDate]) {
+//               acc[formattedDate] = 0;
+//             }
+
+//             acc[formattedDate] += parseFloat(record.grandTotal || 0);
+//             return acc;
+//           }, {});
+
+//           // Extract unique dates and their totals
+//           const dateData = Object.keys(dateTotals);
+//           const dateTotalValues = Object.values(dateTotals);
+
+//           console.log('Unique Dates:', dateData);
+//           console.log('Total Sales for Each Date:', dateTotalValues);
+
+//         } else {
+//           console.error('Fetched data is not an array:', rawData);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
+
+//     fetchData();
+// }, []);
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      console.log("fetching");
+      const response = await axios.get('http://localhost:8080/api/billingpage/billingview');
+      console.log("fetched", response.data);
+
+      const rawData = response.data.billing;
+
+      if (Array.isArray(rawData)) {
+        setData(rawData);
+
+        const total = rawData.reduce((sum, record) => sum + Math.round(parseFloat(record.grandTotal || 0)), 0);
+        setTotalAmount(total);
+
+        const uniqueDates = [...new Set(rawData.map(record => new Date(record.date).toLocaleDateString()))];
+
+        const dateWiseTotalsMap = rawData.reduce((acc, record) => {
+          const date = new Date(record.date).toLocaleDateString();
+          const total = Math.round(parseFloat(record.grandTotal || 0));
+
+          if (!acc[date]) {
+            acc[date] = 0;
+          }
+
+          acc[date] += total;
+          return acc;
+        }, {});
+
+        const dateWiseTotal = uniqueDates.map(date => dateWiseTotalsMap[date]);
+
+        console.log("dateWiseTotal", dateWiseTotal);
+
+        // Update the options with the unique dates and the new series data
+        setOptions(prevOptions => ({
+          ...prevOptions,
+          xaxis: {
+            ...prevOptions.xaxis,
+            categories: uniqueDates,
+          },
+          yaxis: {
+            ...prevOptions.yaxis,
+            labels: {
+              formatter: (value) => Math.round(value)
+            }
+          }
+        }));
+
+        // Update the series with the date-wise totals
+        setSeries([
+          {
+            name: "Total",
+            data: dateWiseTotal,
+          },
+        ]);
+
+      } else {
+        console.error('Fetched data is not an array:', rawData);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-    fetchData();
-  }, []);
+  fetchData();
+}, []);
+
+
   
   const toggleTheme = () => {
     setDarkTheme(!darkTheme);
@@ -89,18 +180,6 @@ function App() {
     {
       name: "PRODUCT A",
       data: [44, 55, 41, 67, 22, 43],
-    },
-    {
-      name: "PRODUCT B",
-      data: [13, 23, 20, 8, 13, 27],
-    },
-    {
-      name: "PRODUCT C",
-      data: [11, 17, 15, 15, 21, 14],
-    },
-    {
-      name: "PRODUCT D",
-      data: [21, 7, 25, 13, 22, 8],
     },
   ]);
 
