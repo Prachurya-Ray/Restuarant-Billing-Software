@@ -26,54 +26,6 @@ function App() {
   const [totalAmount, setTotalAmount] = useState(0);
 
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         console.log("fetching");
-//         const response = await axios.get('http://localhost:8080/api/billingpage/billingview');
-//         console.log("fetched", response.data);
-
-//         const rawData = response.data.billing;
-
-//         // Ensure rawData is an array
-//         if (Array.isArray(rawData)) {
-//           setData(rawData);
-
-//           // Calculate the total amount
-//           const total = Math.round(rawData.reduce((sum, record) => sum + parseFloat(record.grandTotal || 0), 0));
-//           setTotalAmount(total);
-
-//           // Convert date strings to Date objects, then to locale date strings, and store unique dates
-//           const dateTotals = rawData.reduce((acc, record) => {
-//             const dateObj = new Date(record.date);
-//             const formattedDate = dateObj.toLocaleDateString();
-
-//             if (!acc[formattedDate]) {
-//               acc[formattedDate] = 0;
-//             }
-
-//             acc[formattedDate] += parseFloat(record.grandTotal || 0);
-//             return acc;
-//           }, {});
-
-//           // Extract unique dates and their totals
-//           const dateData = Object.keys(dateTotals);
-//           const dateTotalValues = Object.values(dateTotals);
-
-//           console.log('Unique Dates:', dateData);
-//           console.log('Total Sales for Each Date:', dateTotalValues);
-
-//         } else {
-//           console.error('Fetched data is not an array:', rawData);
-//         }
-//       } catch (error) {
-//         console.error('Error fetching data:', error);
-//       }
-//     };
-
-//     fetchData();
-// }, []);
-
 useEffect(() => {
   const fetchData = async () => {
     try {
@@ -105,7 +57,6 @@ useEffect(() => {
 
         const dateWiseTotal = uniqueDates.map(date => dateWiseTotalsMap[date]);
 
-        console.log("dateWiseTotal", dateWiseTotal);
 
         // Update the options with the unique dates and the new series data
         setOptions(prevOptions => ({
